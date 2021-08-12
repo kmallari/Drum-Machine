@@ -16,7 +16,7 @@ const ContinuousSlider = ({ handleSliderChange, volume }) => {
   const classes = useStyles();
 
   return (
-    <div className={`${classes.root} text-white`}>
+    <div className={`${classes.root} text-white mt-4`}>
       <Typography id="continuous-slider" gutterBottom>
         Volume
       </Typography>

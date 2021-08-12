@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-const DrumPad = ({ audioLink, volume }) => {
-  const defaultStyle = `w-24 h-24 bg-gray-700 rounded-xl border-b-4 border-gray-900 transition-all`;
+const DrumPad = ({ audioLink, volume, handleMonitorUpdate, soundName, playAudio, keyTrigger }) => {
+  const defaultStyle = `w-24 h-24 bg-gray-700 rounded-xl border-b-4 border-gray-900 transition-all text-gray-500 m-4 text-xl`;
   const [style, setStyle] = useState(defaultStyle);
   const [audio, setAudio] = useState("");
 
@@ -11,16 +11,16 @@ const DrumPad = ({ audioLink, volume }) => {
 
   const handleClick = () => {
     setStyle(
-      `w-24 h-24 bg-gray-600 rounded-xl border-b-4 border-gray-900 transition-all`
+      `w-24 h-24 bg-gray-600 rounded-xl border-b-4 border-gray-900 transition-all text-white m-4 text-xl`
     );
-    audio.volume = volume / 100;
-    audio.play();
+    playAudio(audio);
     setTimeout(() => {
       setStyle(defaultStyle);
     }, 100);
+    handleMonitorUpdate(soundName);
   };
 
-  return <button onClick={handleClick} className={style}></button>;
+  return <button onClick={handleClick} className={style}>{keyTrigger}</button>;
 };
 
 export default DrumPad;

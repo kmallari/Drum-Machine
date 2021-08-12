@@ -2,6 +2,7 @@ import DrumPad from "./DrumPad";
 import BankSwitch from "./BankSwitch";
 import VolumeSlider from "./VolumeSlider";
 import Monitor from "./Monitor";
+import PowerSwitch from "./PowerSwitch";
 import { useState } from "react";
 
 const DrumMachine = () => {
@@ -118,26 +119,58 @@ const DrumMachine = () => {
       url: "https://s3.amazonaws.com/freecodecamp/drums/Brk_Snr.mp3",
     },
   ];
-
   const [enabled, setEnabled] = useState(false);
   const [volume, setVolume] = useState(30);
   const [keyword, setKeyword] = useState("");
+  const [power, setPower] = useState(false);
+
+  const playAudio = (audio) => {
+    audio.volume = volume / 100;
+    audio.currentTime = 0;
+    audio.play();
+  };
+
+  const handleMonitorUpdate = (text) => {
+    setKeyword(text);
+  };
 
   const handleSliderChange = (event, newVolume) => {
     setVolume(newVolume);
-    setKeyword(`Volume: ${newVolume}`);
+    handleMonitorUpdate(newVolume);
   };
 
-  const bank = enabled ? bankOne : bankTwo;
+  let bank = enabled ? bankOne : bankTwo;
+
+  if (!power) {
+    for (let i = 0; i < bank.length; i++) {
+      bank[i].id = "";
+      bank[i].url = "";
+    }
+  }
 
   return (
-    <div>
-      <BankSwitch enabled={enabled} setEnabled={setEnabled} />
-      <VolumeSlider handleSliderChange={handleSliderChange} volume={volume} />
-      <Monitor keyword={keyword} />
-      {bank.map((val, i) => {
-        return <DrumPad audioLink={val.url} volume={volume} key={i} />;
-      })}
+    <div className="flex flex-col md:flex-row">
+      <div className="max-w-sm">
+        {bank.map((val, i) => {
+          return (
+            <DrumPad
+              audioLink={val.url}
+              volume={volume}
+              handleMonitorUpdate={handleMonitorUpdate}
+              soundName={val.id}
+              key={i}
+              playAudio={playAudio}
+              keyTrigger={val.keyTrigger}
+            />
+          );
+        })}
+      </div>
+      <div id="side-bar" className="m-4">
+        <PowerSwitch power={power} setPower={setPower} />
+        <BankSwitch enabled={enabled} setEnabled={setEnabled} />
+        <VolumeSlider handleSliderChange={handleSliderChange} volume={volume} />
+        <Monitor keyword={keyword} />
+      </div>
     </div>
   );
 };

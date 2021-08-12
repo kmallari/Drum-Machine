@@ -3,7 +3,7 @@ import BankSwitch from "./BankSwitch";
 import VolumeSlider from "./VolumeSlider";
 import Monitor from "./Monitor";
 import PowerSwitch from "./PowerSwitch";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const DrumMachine = () => {
   const bankOne = [
@@ -123,6 +123,9 @@ const DrumMachine = () => {
   const [volume, setVolume] = useState(30);
   const [keyword, setKeyword] = useState("");
   const [power, setPower] = useState(false);
+  const [keyPressed, setKeyPressed] = useState("");
+
+
 
   const playAudio = (audio) => {
     audio.volume = volume / 100;
@@ -161,6 +164,7 @@ const DrumMachine = () => {
               key={i}
               playAudio={playAudio}
               keyTrigger={val.keyTrigger}
+              keyCode={val.keyCode}
             />
           );
         })}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const DrumPad = ({ audioLink, volume, handleMonitorUpdate, soundName, playAudio, keyTrigger }) => {
+const DrumPad = ({ audioLink, volume, handleMonitorUpdate, soundName, playAudio, keyTrigger, keyCode }) => {
   const defaultStyle = `w-24 h-24 bg-gray-700 rounded-xl border-b-4 border-gray-900 transition-all text-gray-500 m-4 text-xl`;
   const [style, setStyle] = useState(defaultStyle);
   const [audio, setAudio] = useState("");
@@ -8,6 +8,16 @@ const DrumPad = ({ audioLink, volume, handleMonitorUpdate, soundName, playAudio,
   useEffect(() => {
     setAudio(new Audio(audioLink));
   }, [audioLink]);
+
+  const handleKeyPress = (e) => {
+    if (e.keyCode === keyCode) {
+      handleClick();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress)
+  },[])
 
   const handleClick = () => {
     setStyle(
